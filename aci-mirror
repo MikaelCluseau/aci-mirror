@@ -14,8 +14,10 @@ final_name="$3"
 
 local_dir="${local_image}.dir"
 
-rkt fetch --trust-keys-from-https "$remote_image"
-rkt image render "$remote_image" "$local_dir"
+if ! [ -e "$local_dir" ]; then
+    rkt fetch --trust-keys-from-https "$remote_image"
+    rkt image render "$remote_image" "$local_dir"
+fi
 
 actool build "$local_dir" "$local_image"
 rm -fr "$local_dir"
